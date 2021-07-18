@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "xero-jobs": {
+      "hosting": {
+        "xero-jobs": [
+          "xero-jobs"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "xero-jobs"
+  }
+}
