@@ -8,6 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -53,6 +54,7 @@ import { LoginComponent } from './login/login.component';
     MatButtonModule,
     MatCardModule,
     MatListModule,
+    MatRadioModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

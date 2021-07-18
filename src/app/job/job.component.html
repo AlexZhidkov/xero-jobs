@@ -1,1 +1,28 @@
-<p>job works!</p>
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>Create New Job</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-form-field class="full-width">
+            <mat-label>Customer</mat-label>
+            <input matInput>
+        </mat-form-field>
+        <mat-radio-group aria-label="Select an option">
+            <mat-radio-button value="1">Warranty</mat-radio-button>
+            <mat-radio-button value="2">Charge</mat-radio-button>
+            <mat-radio-button value="3">Third Party</mat-radio-button>
+        </mat-radio-group>
+        <mat-form-field class="full-width">
+            <textarea matInput rows="5" placeholder="Fault Reported"></textarea>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+            <textarea matInput rows="5" placeholder="Findings"></textarea>
+        </mat-form-field>
+
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-raised-button color="primary" routerLink="/">
+            Save to XERO
+        </button>
+    </mat-card-actions>
+</mat-card>
