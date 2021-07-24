@@ -41,6 +41,7 @@ testem.log
 /typings
 
 .firebase
+*.log
 
 # System Files
 .DS_Store
