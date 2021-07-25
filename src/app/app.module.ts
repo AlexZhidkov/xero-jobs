@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireFunctionsModule } from '@angular/fire/functions';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -39,6 +40,7 @@ import { LoginComponent } from './login/login.component';
       registrationStrategy: 'registerWhenStable:30000'
     }),
     FormsModule,
+    ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireFunctionsModule,
     NgxAuthFirebaseUIModule.forRoot(environment.firebase, undefined, {
@@ -55,6 +57,7 @@ import { LoginComponent } from './login/login.component';
     MatCardModule,
     MatListModule,
     MatRadioModule,
+    MatAutocompleteModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

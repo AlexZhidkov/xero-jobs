@@ -2,6 +2,16 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.1.2.
 
+## Links
+https://developer.xero.com/app/manage
+https://developer.xero.com/documentation/api/accounting/contacts/
+https://github.com/XeroAPI/xero-node
+https://github.com/XeroAPI/xero-node-oauth2-ts-starter
+https://github.com/XeroAPI/xero-node-oauth2-app/blob/master/src/app.ts
+
+[Building a REST API with Firebase cloud functions, TypeScript, and Firestore](https://blog.logrocket.com/rest-api-firebase-cloud-functions-typescript-firestore/)
+https://firebase.google.com/docs/functions/typescript
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
