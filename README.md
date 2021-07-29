@@ -8,6 +8,7 @@ https://developer.xero.com/documentation/api/accounting/contacts/
 https://github.com/XeroAPI/xero-node
 https://github.com/XeroAPI/xero-node-oauth2-ts-starter
 https://github.com/XeroAPI/xero-node-oauth2-app/blob/master/src/app.ts
+https://stackoverflow.com/questions/64096100/firebase-functions-integration-with-xero-node
 
 [Building a REST API with Firebase cloud functions, TypeScript, and Firestore](https://blog.logrocket.com/rest-api-firebase-cloud-functions-typescript-firestore/)
 https://firebase.google.com/docs/functions/typescript
