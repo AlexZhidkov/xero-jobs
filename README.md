@@ -13,6 +13,12 @@ https://stackoverflow.com/questions/64096100/firebase-functions-integration-with
 [Building a REST API with Firebase cloud functions, TypeScript, and Firestore](https://blog.logrocket.com/rest-api-firebase-cloud-functions-typescript-firestore/)
 https://firebase.google.com/docs/functions/typescript
 
+```
+firebase functions:config:set xero.client_id="XXX" xero.client_secret="XXX"
+firebase functions:config:set xero.redirect_uri="https://australia-southeast1-xero-jobs.cloudfunctions.net/xeroInit/AuthorizationCallback"
+firebase functions:config:set app.url="https://xero-jobs.web.app"
+```
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
