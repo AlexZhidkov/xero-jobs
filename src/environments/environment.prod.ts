@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  useEmulators: false,
   firebase: {
     apiKey: "AIzaSyC0sgfmCFsHZXQCdJXWdg4hYiWX5C9D-lQ",
     authDomain: "xero-jobs.firebaseapp.com",

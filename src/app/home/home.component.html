@@ -1,6 +1,9 @@
-<mat-nav-list>
+<mat-nav-list *ngIf="uid">
     <a mat-list-item [routerLink]="['/job']">
         Create new job
+    </a>
+    <a mat-list-item [href]="'http://localhost:5001/xero-jobs/australia-southeast1/xeroInit/connect?uid='+uid">
+        Connect to Xero
     </a>
     <a mat-list-item (click)="syncContacts()">
         Sync Contacts from Xero
