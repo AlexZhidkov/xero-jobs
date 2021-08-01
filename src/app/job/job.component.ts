@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireFunctions } from '@angular/fire/functions';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -11,11 +12,15 @@ import { map, startWith } from 'rxjs/operators';
 })
 export class JobComponent implements OnInit {
   contacts: any[] = [];
+  faultReported: string;
+  findings: string;
+  amount: number;
   customerControl = new FormControl();
   filteredContacts: Observable<any[]>;
 
   constructor(
     private afs: AngularFirestore,
+    private fns: AngularFireFunctions,
   ) { }
 
   ngOnInit(): void {
@@ -28,6 +33,30 @@ export class JobComponent implements OnInit {
     this.afs.collection(`tenants`).doc('test').get().subscribe(r => {
       const doc = <any>r.data()
       this.contacts = doc.contacts;
+    });
+  }
+
+  createInvoice(): void {
+    console.log("createInvoice");
+    const createInvoices = this.fns.httpsCallable('xeroCreateInvoices');
+    const data = {
+      invoices: [
+        {
+          type: "ACCREC",
+          contact: {
+            contactID: this.customerControl.value.contactID
+          },
+          lineItems: [
+            {
+              description: `Fault Reported: ${this.faultReported}. Findings: ${this.findings}.`,
+              lineAmount: this.amount
+            }
+          ],
+        }
+      ]
+    };
+    createInvoices(data).subscribe(r => {
+      console.log(r);
     });
   }
 

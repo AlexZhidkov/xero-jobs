@@ -21,7 +21,7 @@ const xero = new xeroNode.XeroClient({
     clientId: xeroClientId,
     clientSecret: xeroClientSecret,
     redirectUris: [xeroRedirectUri],
-    scopes: ['openid', 'profile', 'email', 'accounting.transactions', 'accounting.settings', 'offline_access'],
+    scopes: ['openid', 'profile', 'email', 'accounting.transactions', 'accounting.contacts', 'offline_access'],
     httpTimeout: 3000,
 });
 
@@ -77,4 +77,12 @@ exports.xeroContacts = functions.region('australia-southeast1').https.onCall(asy
     const response = await xero.accountingApi
         .getContacts(xero.tenants[0].tenantId, undefined, undefined, 'name', undefined, undefined, false, true);
     return response.body.contacts;
+});
+
+exports.xeroCreateInvoices = functions.region('australia-southeast1').https.onCall(async (data, context) => {
+    currentUserUid = context.auth.uid;
+    await connect(); // Doesn't handle errors and will break if inactive for 60 days but you get the idea
+    await xero.updateTenants();
+    const response = await xero.accountingApi.createInvoices(xero.tenants[0].tenantId, data);
+    return response.body.invoices;
 });

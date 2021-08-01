@@ -16,21 +16,24 @@
         </form>
 
         <mat-radio-group aria-label="Select an option">
-            <mat-radio-button value="1">Warranty</mat-radio-button>
-            <mat-radio-button value="2">Charge</mat-radio-button>
-            <mat-radio-button value="3">Third Party</mat-radio-button>
+            <mat-radio-button value="Warranty">Warranty</mat-radio-button>
+            <mat-radio-button value="Charge">Charge</mat-radio-button>
+            <mat-radio-button value="Third Party">Third Party</mat-radio-button>
         </mat-radio-group>
         <mat-form-field class="full-width">
-            <textarea matInput rows="5" placeholder="Fault Reported"></textarea>
+            <textarea matInput rows="5" placeholder="Fault Reported" [(ngModel)]="faultReported"></textarea>
         </mat-form-field>
         <mat-form-field class="full-width">
-            <textarea matInput rows="5" placeholder="Findings"></textarea>
+            <textarea matInput rows="5" placeholder="Findings" [(ngModel)]="findings"></textarea>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="number" placeholder="Amount" [(ngModel)]="amount">
         </mat-form-field>
 
     </mat-card-content>
     <mat-card-actions>
-        <button mat-raised-button color="primary" routerLink="/">
-            Save to XERO
+        <button mat-raised-button color="primary" (click)="createInvoice()" routerLink="/">
+            Create Invoice in XERO
         </button>
     </mat-card-actions>
 </mat-card>
