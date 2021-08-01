@@ -1,11 +1,23 @@
-<mat-nav-list *ngIf="uid">
-    <a mat-list-item [routerLink]="['/job']">
-        Create new job
-    </a>
-    <a mat-list-item [href]="'https://australia-southeast1-xero-jobs.cloudfunctions.net/xeroInit/connect?uid='+uid">
-        Connect to Xero
-    </a>
-    <a mat-list-item (click)="syncContacts()">
-        Sync Contacts from Xero
-    </a>
-</mat-nav-list>
+<mat-spinner style="margin:0 auto;" *ngIf="isLoading"></mat-spinner>
+<mat-card *ngIf="!isLoading">
+    <mat-card-header *ngIf="organisationName">
+        <div mat-card-avatar class="xero-logo"></div>
+        <mat-card-title>{{organisationName}}</mat-card-title>
+        <mat-card-subtitle>Connected to Xero Organisation</mat-card-subtitle>
+    </mat-card-header>
+    <mat-nav-list *ngIf="uid">
+        <a mat-list-item *ngIf="tenantId" [routerLink]="['/job']">
+            Create new job
+        </a>
+        <a mat-list-item *ngIf="!tenantId"
+            [href]="'https://australia-southeast1-xero-jobs.cloudfunctions.net/xeroInit/connect?uid='+uid">
+            Connect to Xero
+        </a>
+        <a mat-list-item *ngIf="tenantId" (click)="syncContacts()">
+            Sync Contacts from Xero
+        </a>
+        <a mat-list-item *ngIf="tenantId" (click)="disconnectFromXero()">
+            Disconnect from Xero
+        </a>
+    </mat-nav-list>
+</mat-card>

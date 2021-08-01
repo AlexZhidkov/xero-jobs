@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
@@ -58,6 +59,7 @@ import { LoginComponent } from './login/login.component';
     MatListModule,
     MatRadioModule,
     MatAutocompleteModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     { provide: REGION, useValue: 'australia-southeast1' },
