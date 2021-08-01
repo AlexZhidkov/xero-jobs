@@ -1,5 +1,6 @@
-<mat-spinner style="margin:0 auto;" *ngIf="isLoading"></mat-spinner>
-<mat-card *ngIf="!isLoading">
+<mat-progress-bar mode="indeterminate" *ngIf="toLoad > 0"></mat-progress-bar>
+
+<mat-card>
     <mat-card-header *ngIf="organisationName">
         <div mat-card-avatar class="xero-logo"></div>
         <mat-card-title>{{organisationName}}</mat-card-title>
@@ -9,11 +10,11 @@
         <a mat-list-item *ngIf="tenantId" [routerLink]="['/job']">
             Create new job
         </a>
-        <a mat-list-item *ngIf="!tenantId"
+        <a mat-list-item *ngIf="toLoad ===0 && !tenantId"
             [href]="'https://australia-southeast1-xero-jobs.cloudfunctions.net/xeroInit/connect?uid='+uid">
             Connect to Xero
         </a>
-        <a mat-list-item *ngIf="tenantId" (click)="syncContacts()">
+        <a mat-list-item *ngIf="tenantId" (click)="syncXero()">
             Sync Contacts from Xero
         </a>
         <a mat-list-item *ngIf="tenantId" (click)="disconnectFromXero()">

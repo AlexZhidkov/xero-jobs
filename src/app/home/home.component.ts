@@ -9,7 +9,8 @@ import { AngularFireFunctions } from '@angular/fire/functions';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  isLoading: boolean = true;
+  toLoad: number = 0;
+  doesTokenExist: boolean = false;
   uid: string | undefined;
   organisationName: string;
   tenantId: string;
@@ -21,9 +22,26 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.toLoad++;
     this.auth.user.subscribe(user => {
+      this.toLoad--;
       this.uid = user?.uid;
-      this.getXeroOrganisation();
+      if (this.uid) {
+        this.toLoad++;
+        this.afs.collection('users').doc(this.uid).get().subscribe(u => {
+          this.toLoad--;
+          const user = <any>u.data();
+          this.doesTokenExist = <boolean>user?.xeroRefreshToken;
+          if (this.doesTokenExist) {
+            if (!(user.organisationName && user.tenantId)) {
+              this.syncXero();
+            } else {
+              this.organisationName = user.organisationName;
+              this.tenantId = user.tenantId;
+            }
+          }
+        })
+      }
     })
   }
 
@@ -36,25 +54,29 @@ export class HomeComponent implements OnInit {
     this.afs.collection(`users`).doc(this.uid).update({ xeroRefreshToken: null });
   }
 
-  getXeroOrganisation() {
+  syncXero() {
+    this.toLoad++;
     const getOrganisation = this.fns.httpsCallable('xeroOrganisation');
     getOrganisation(null).subscribe(r => {
-      this.isLoading = false;
+      this.toLoad--;
       this.organisationName = r.tenantName;
       this.tenantId = r.tenantId;
+      this.afs.collection(`users`).doc(this.uid).update({ organisationName: this.organisationName, tenantId: this.tenantId })
+      this.syncContacts();
     },
       (err) => {
-        this.isLoading = false;
+        this.toLoad--;
         console.log(err);
       });
   }
 
   syncContacts(): void {
+    this.toLoad++;
     console.log("syncContacts");
     const getContacts = this.fns.httpsCallable('xeroContacts');
     getContacts(null).subscribe(r => {
-      this.afs.collection(`tenants`).doc(this.tenantId).set({ name: this.organisationName, user: this.uid, contacts: r });
-      console.log('Contacts Updated');
+      this.afs.collection(`tenants`).doc(this.tenantId).set({ name: this.organisationName, user: this.uid, contacts: r })
+        .finally(() => this.toLoad--);
     });
   }
 }
