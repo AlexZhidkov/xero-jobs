@@ -76,7 +76,7 @@ exports.xeroContacts = functions.region('australia-southeast1').https.onCall(asy
     await xero.updateTenants();
     const response = await xero.accountingApi
         .getContacts(xero.tenants[0].tenantId, undefined, undefined, 'name', undefined, undefined, false, true);
-    return response.body.contacts;
+    return response.body.contacts.map(contact => { return { contactID: contact.contactID, name: contact.name } });
 });
 
 exports.xeroCreateInvoices = functions.region('australia-southeast1').https.onCall(async (data, context) => {

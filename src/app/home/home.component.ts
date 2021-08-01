@@ -53,7 +53,7 @@ export class HomeComponent implements OnInit {
     console.log("syncContacts");
     const getContacts = this.fns.httpsCallable('xeroContacts');
     getContacts(null).subscribe(r => {
-      this.afs.collection(`tenants`).doc(this.tenantId).update({ name: this.organisationName, contacts: r });
+      this.afs.collection(`tenants`).doc(this.tenantId).set({ name: this.organisationName, user: this.uid, contacts: r });
       console.log('Contacts Updated');
     });
   }
