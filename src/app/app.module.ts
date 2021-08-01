@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -60,6 +61,7 @@ import { LoginComponent } from './login/login.component';
     MatRadioModule,
     MatAutocompleteModule,
     MatProgressBarModule,
+    MatSnackBarModule,
   ],
   providers: [
     { provide: REGION, useValue: 'australia-southeast1' },

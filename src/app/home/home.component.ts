@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +20,7 @@ export class HomeComponent implements OnInit {
     private auth: AngularFireAuth,
     private afs: AngularFirestore,
     private fns: AngularFireFunctions,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -75,8 +77,12 @@ export class HomeComponent implements OnInit {
     console.log("syncContacts");
     const getContacts = this.fns.httpsCallable('xeroContacts');
     getContacts(null).subscribe(r => {
+      this.snackBar.open(`${r.length} contacts updated`, 'hide', {
+        duration: 5000
+      });
       this.afs.collection(`tenants`).doc(this.tenantId).set({ name: this.organisationName, user: this.uid, contacts: r })
         .finally(() => this.toLoad--);
     });
   }
+
 }
