@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { FormControl } from '@angular/forms';
@@ -11,6 +12,7 @@ import { map, startWith } from 'rxjs/operators';
   styleUrls: ['./job.component.css']
 })
 export class JobComponent implements OnInit {
+  toLoad: number = 0;
   contacts: any[] = [];
   faultReported: string;
   findings: string;
@@ -21,19 +23,27 @@ export class JobComponent implements OnInit {
   constructor(
     private afs: AngularFirestore,
     private fns: AngularFireFunctions,
+    private auth: AngularFireAuth,
   ) { }
 
   ngOnInit(): void {
+    this.toLoad++;
+    this.auth.user.subscribe(user => {
+      this.afs.collection('users').doc(user?.uid).get().subscribe(u => {
+        const user = <any>u.data();
+        this.afs.collection(`tenants`).doc(user.tenantId).get().subscribe(r => {
+          this.toLoad--;
+          const doc = <any>r.data()
+          this.contacts = doc.contacts;
+        });
+      })
+    })
+
     this.filteredContacts = this.customerControl.valueChanges.pipe(
       startWith(''),
       map(value => typeof value === 'string' ? value : value.name),
       map(name => name ? this._filter(name) : this.contacts.slice())
     );
-
-    this.afs.collection(`tenants`).doc('test').get().subscribe(r => {
-      const doc = <any>r.data()
-      this.contacts = doc.contacts;
-    });
   }
 
   createInvoice(): void {
