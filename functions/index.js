@@ -74,14 +74,25 @@ exports.xeroContacts = functions.region('australia-southeast1').https.onCall(asy
     currentUserUid = context.auth.uid;
     await connect(); // Doesn't handle errors and will break if inactive for 60 days but you get the idea
     await xero.updateTenants();
-    const response = await xero.accountingApi
-        .getContacts(xero.tenants[0].tenantId, undefined, undefined, 'name', undefined, undefined, false, true);
-    return response.body.contacts.map((contact) => {
-        return {
-            contactID: contact.contactID,
-            name: contact.name,
-        };
-    });
+    let xeroContacts = [];
+    let contacts = [];
+    let pageNumber = 0;
+    do {
+        pageNumber++;
+        xeroContacts = await xero.accountingApi
+            .getContacts(xero.tenants[0].tenantId, undefined, undefined, 'name', undefined, pageNumber, false, true);
+
+        console.log('Page number: ', pageNumber);
+        console.log('Got contacts from Xero: ', xeroContacts.body.contacts.length);
+        contacts = contacts.concat(xeroContacts.body.contacts.map((contact) => {
+            return {
+                contactID: contact.contactID,
+                name: contact.name,
+            };
+        }));
+    } while (xeroContacts.body.contacts.length);
+    console.log('Returning contacts: ', contacts.length);
+    return contacts;
 });
 
 exports.xeroCreateInvoices = functions.region('australia-southeast1').https.onCall(async (data, context) => {

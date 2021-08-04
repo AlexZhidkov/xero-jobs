@@ -17,6 +17,9 @@ https://firebase.google.com/docs/functions/typescript
 firebase functions:config:set xero.client_id="XXX" xero.client_secret="XXX"
 firebase functions:config:set xero.redirect_uri="https://australia-southeast1-xero-jobs.cloudfunctions.net/xeroInit/AuthorizationCallback"
 firebase functions:config:set app.url="https://xero-jobs.web.app"
+
+firebase emulators:start --only functions
+firebase deploy --only functions
 ```
 
 ## Development server
