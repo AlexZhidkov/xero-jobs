@@ -4,6 +4,10 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+interface Contact {
+  contactID: string;
+  name: string;
+}
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -75,14 +79,56 @@ export class HomeComponent implements OnInit {
   syncContacts(): void {
     this.toLoad++;
     console.log("syncContacts");
-    const getContacts = this.fns.httpsCallable('xeroContacts');
-    getContacts(null).subscribe(r => {
-      this.snackBar.open(`${r.length} contacts updated`, 'hide', {
-        duration: 5000
-      });
-      this.afs.collection(`tenants`).doc(this.tenantId).set({ name: this.organisationName, user: this.uid, contacts: r })
-        .finally(() => this.toLoad--);
+    const currentTime = new Date();
+    var tenant = {
+      contacts: <Contact[]>[],
+      contactsUpdatedOn: <firebase.default.firestore.Timestamp | Date | null>null
+    };
+
+    this.afs.collection(`tenants`).doc(this.tenantId).get().subscribe(t => {
+      if (t.exists) {
+        tenant = <any>t.data();
+        tenant.contactsUpdatedOn = (<firebase.default.firestore.Timestamp>tenant.contactsUpdatedOn).toDate();
+      }
+
+      const getContacts = this.fns.httpsCallable('xeroContacts');
+      var data = {
+        modifiedAfter: tenant.contactsUpdatedOn
+      };
+
+      getContacts(data).subscribe((updatedContacts: Contact[]) => {
+        if (updatedContacts.length) {
+          this.snackBar.open(`${updatedContacts.length} contacts updated`, 'hide', {
+            duration: 5000
+          });
+          debugger;
+
+          if (tenant.contacts?.length) {
+            const oldNotModifiedContacts = tenant.contacts.filter(c => updatedContacts.findIndex(up => up.contactID === c.contactID) === -1);
+            const combinedContacts = oldNotModifiedContacts.concat(updatedContacts);
+            combinedContacts.sort(function (a, b) {
+              let x = a.name.toLowerCase();
+              let y = b.name.toLowerCase();
+              if (x < y) { return -1; }
+              if (x > y) { return 1; }
+              return 0;
+            });
+
+            this.afs.collection(`tenants`).doc(this.tenantId).set({ name: this.organisationName, user: this.uid, contacts: combinedContacts, contactsUpdatedOn: currentTime })
+              .finally(() => this.toLoad--);
+          } else {
+            this.afs.collection(`tenants`).doc(this.tenantId).set({ name: this.organisationName, user: this.uid, contacts: updatedContacts, contactsUpdatedOn: currentTime })
+              .finally(() => this.toLoad--);
+          }
+        } else {
+          this.snackBar.open(`No updated contacts in Xero`, 'hide', {
+            duration: 5000
+          });
+
+          this.afs.collection(`tenants`).doc(this.tenantId).update({ name: this.organisationName, user: this.uid, contactsUpdatedOn: currentTime })
+            .finally(() => this.toLoad--);
+        }
+      })
     });
   }
-
 }

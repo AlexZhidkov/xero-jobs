@@ -80,7 +80,7 @@ exports.xeroContacts = functions.region('australia-southeast1').https.onCall(asy
     do {
         pageNumber++;
         xeroContacts = await xero.accountingApi
-            .getContacts(xero.tenants[0].tenantId, undefined, undefined, 'name', undefined, pageNumber, false, true);
+            .getContacts(xero.tenants[0].tenantId, data?.modifiedAfter ? new Date(data.modifiedAfter) : null, undefined, 'name', undefined, pageNumber, false, true);
 
         console.log('Page number: ', pageNumber);
         console.log('Got contacts from Xero: ', xeroContacts.body.contacts.length);
