@@ -38,12 +38,8 @@ export class InvoiceComponent implements OnInit {
 
   ngOnInit(): void {
     this.invoice = {
-      invoiceType: 'ACCREC',
-      lineItems: [
-        { description: 'One' },
-        { description: 'Two' },
-      ]
-
+      type: 'ACCREC',
+      lineItems: []
     }
     this.toLoad++;
     this.auth.user.subscribe(user => {
@@ -78,6 +74,12 @@ export class InvoiceComponent implements OnInit {
     });
   }
 
+  addLineItem(): void {
+    var lineItem = {};
+    this.invoice.lineItems.push(lineItem);
+    this.openDialog(lineItem);
+  }
+
   deleteLineItem(item: any): void {
     console.log('deleteLineItem');
   }
@@ -87,25 +89,7 @@ export class InvoiceComponent implements OnInit {
     this.invoice.contact = {
       contactID: this.customerControl.value.contactID
     };
-
-    const data = {
-      invoices: [
-        {
-          type: "ACCREC",
-          contact: {
-            contactID: this.customerControl.value.contactID
-          },
-          lineItems: [
-            {
-              description: `Fault Reported: ${this.faultReported}. Findings: ${this.findings}.`,
-              lineAmount: this.amount
-            }
-          ],
-        }
-      ]
-    };
-
-    createInvoices(data).subscribe(r => {
+    createInvoices({ invoices: [this.invoice] }).subscribe(r => {
       console.log(r);
     });
   }
