@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
@@ -21,7 +22,9 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
+import { InvoiceComponent } from './invoice/invoice.component';
 import { JobComponent } from './job/job.component';
+import { LineItemDialogComponent } from './line-item-dialog/line-item-dialog.component';
 import { LoginComponent } from './login/login.component';
 
 @NgModule({
@@ -29,7 +32,9 @@ import { LoginComponent } from './login/login.component';
     AppComponent,
     LoginComponent,
     HomeComponent,
-    JobComponent
+    JobComponent,
+    InvoiceComponent,
+    LineItemDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -53,6 +58,7 @@ import { LoginComponent } from './login/login.component';
     }),
     FlexLayoutModule,
     MatToolbarModule,
+    MatDialogModule,
     MatIconModule,
     MatInputModule,
     MatButtonModule,
