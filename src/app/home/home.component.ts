@@ -88,7 +88,7 @@ export class HomeComponent implements OnInit {
     this.afs.collection(`tenants`).doc(this.tenantId).get().subscribe(t => {
       if (t.exists) {
         tenant = <any>t.data();
-        tenant.contactsUpdatedOn = (<firebase.default.firestore.Timestamp>tenant.contactsUpdatedOn).toDate();
+        tenant.contactsUpdatedOn = (<firebase.default.firestore.Timestamp>tenant.contactsUpdatedOn)?.toDate();
       }
 
       const getContacts = this.fns.httpsCallable('xeroContacts');
@@ -101,7 +101,6 @@ export class HomeComponent implements OnInit {
           this.snackBar.open(`${updatedContacts.length} contacts updated`, 'hide', {
             duration: 5000
           });
-          debugger;
 
           if (tenant.contacts?.length) {
             const oldNotModifiedContacts = tenant.contacts.filter(c => updatedContacts.findIndex(up => up.contactID === c.contactID) === -1);
