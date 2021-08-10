@@ -51,15 +51,6 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  connectToXero() {
-  }
-
-  disconnectFromXero() {
-    this.organisationName = '';
-    this.tenantId = '';
-    this.afs.collection(`users`).doc(this.uid).update({ xeroRefreshToken: null });
-  }
-
   syncXero() {
     this.toLoad++;
     const getOrganisation = this.fns.httpsCallable('xeroOrganisation');

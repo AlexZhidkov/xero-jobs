@@ -12,6 +12,8 @@ export class AppComponent implements OnInit {
   user: firebase.default.User | null = null;
   showSignInButton: boolean = false;
   avatarLinks: LinkMenuItem[] = [
+    { icon: 'link', text: 'Connect to Xero', callback: () => { this.connectToXero(); } },
+    { icon: 'link_off', text: 'Disconnect from Xero', callback: () => { this.disconnectFromXero(); } },
     { icon: 'account_circle', text: 'Profile', callback: () => { this.router.navigate(['profile']); } },
   ];
 
@@ -26,6 +28,16 @@ export class AppComponent implements OnInit {
       this.user = user;
       this.showSignInButton = Boolean(!user);
     });
+  }
+
+  connectToXero(): void {
+    window.location.href = `https://australia-southeast1-xero-jobs.cloudfunctions.net/xeroInit/connect?uid=${this.user?.uid}`;
+  }
+
+  disconnectFromXero() {
+    this.afs.collection(`users`).doc(this.user?.uid).update({ xeroRefreshToken: null })
+      .then(() => this.router.navigate(['/'])
+        .then(() => location.reload()));
   }
 
   onSignOut(): void {
