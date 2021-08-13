@@ -1,13 +1,14 @@
 <mat-card>
     <mat-card-header>
-        <mat-card-title>Create New Job</mat-card-title>
+        <mat-card-title>Job</mat-card-title>
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-content *ngIf="job">
         <form>
             <mat-form-field class="full-width">
                 <input type="text" placeholder="Customer" aria-label="Customer" matInput [formControl]="customerControl"
                     [matAutocomplete]="auto">
-                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+                    (optionSelected)="customerSelected($event.option.value)">
                     <mat-option *ngFor="let contact of filteredContacts | async" [value]="contact">
                         {{contact.name}}
                     </mat-option>
@@ -15,19 +16,23 @@
             </mat-form-field>
         </form>
 
-        <mat-radio-group aria-label="Select an option">
-            <mat-radio-button value="Warranty">Warranty</mat-radio-button>
-            <mat-radio-button value="Charge">Charge</mat-radio-button>
-            <mat-radio-button value="Third Party">Third Party</mat-radio-button>
+        <mat-radio-group aria-label="Select an option" [ngModel]="job.type"
+            (ngModelChange)="jobDoc.update({type: $event})">
+            <mat-radio-button value="warranty">Warranty</mat-radio-button>
+            <mat-radio-button value="charge">Charge</mat-radio-button>
+            <mat-radio-button value="third party">Third Party</mat-radio-button>
         </mat-radio-group>
         <mat-form-field class="full-width">
-            <textarea matInput rows="5" placeholder="Fault Reported" [(ngModel)]="faultReported"></textarea>
+            <textarea matInput rows="5" placeholder="Fault Reported" [ngModel]="job.faultReported"
+                (ngModelChange)="jobDoc.update({faultReported: $event})"></textarea>
         </mat-form-field>
-        <mat-form-field class="full-width">
-            <textarea matInput rows="5" placeholder="Findings" [(ngModel)]="findings"></textarea>
+        <mat-form-field class=" full-width">
+            <textarea matInput rows="5" placeholder="Findings" [ngModel]="job.findings"
+                (ngModelChange)="jobDoc.update({findings: $event})"></textarea>
         </mat-form-field>
         <mat-form-field>
-            <input matInput type="number" placeholder="Amount" [(ngModel)]="amount">
+            <input matInput type="number" placeholder="Amount" [ngModel]="job.amount"
+                (ngModelChange)="jobDoc.update({amount: $event})">
         </mat-form-field>
 
     </mat-card-content>

@@ -9,6 +9,7 @@ import { LoginComponent } from './login/login.component';
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'invoice', component: InvoiceComponent, canActivate: [CanActivateGuard] },
+  { path: 'job/:jobId', component: JobComponent, canActivate: [CanActivateGuard] },
   { path: 'job', component: JobComponent, canActivate: [CanActivateGuard] },
   { path: '', component: HomeComponent }
 ];

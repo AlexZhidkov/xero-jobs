@@ -1,24 +1,28 @@
 <mat-progress-bar mode="indeterminate" *ngIf="toLoad > 0"></mat-progress-bar>
 
-<mat-card>
+<mat-card *ngIf="uid">
     <mat-card-header *ngIf="organisationName">
         <div mat-card-avatar class="xero-logo"></div>
         <mat-card-title>{{organisationName}}</mat-card-title>
         <mat-card-subtitle>Connected to Xero Organisation</mat-card-subtitle>
     </mat-card-header>
-    <mat-nav-list *ngIf="uid">
-        <a mat-list-item *ngIf="tenantId" [routerLink]="['/invoice']">
-            Create invoice
-        </a>
-        <a mat-list-item *ngIf="tenantId" [routerLink]="['/job']">
-            Create new job
-        </a>
-        <a mat-list-item *ngIf="toLoad ===0 && !tenantId"
-            [href]="'https://australia-southeast1-xero-jobs.cloudfunctions.net/xeroInit/connect?uid='+uid">
-            Connect to Xero
-        </a>
-        <a mat-list-item *ngIf="tenantId" (click)="syncXero()">
+    <mat-card-actions *ngIf="tenantId">
+        <button mat-raised-button [routerLink]="['/job']">
+            New Job
+        </button>
+        <button mat-raised-button [routerLink]="['/invoice']">
+            Invoice
+        </button>
+        <button mat-raised-button (click)="syncXero()">
             Sync Contacts from Xero
-        </a>
+        </button>
+    </mat-card-actions>
+    <mat-nav-list>
+        <mat-list-item *ngFor="let job of jobs | async">
+            <a matLine [routerLink]="['/job/'+job.id]">
+                {{job.customer?.name}}
+            </a>
+            <div matLine>{{job.faultReported}}</div>
+        </mat-list-item>
     </mat-nav-list>
 </mat-card>

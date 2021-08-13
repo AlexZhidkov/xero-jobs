@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { FormControl } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
@@ -13,7 +14,10 @@ import { map, startWith } from 'rxjs/operators';
 })
 export class JobComponent implements OnInit {
   toLoad: number = 0;
+  jobId: string;
   contacts: any[] = [];
+  jobDoc: AngularFirestoreDocument<any>;
+  job: any;
   faultReported: string;
   findings: string;
   amount: number;
@@ -24,10 +28,13 @@ export class JobComponent implements OnInit {
     private afs: AngularFirestore,
     private fns: AngularFireFunctions,
     private auth: AngularFireAuth,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
     this.toLoad++;
+    const jobId = this.route.snapshot.paramMap.get('jobId');
+
     this.auth.user.subscribe(user => {
       this.afs.collection('users').doc(user?.uid).get().subscribe(u => {
         const user = <any>u.data();
@@ -35,6 +42,19 @@ export class JobComponent implements OnInit {
           this.toLoad--;
           const doc = <any>r.data()
           this.contacts = doc.contacts;
+          if (jobId) {
+            this.jobId = jobId;
+          } else {
+            this.jobId = this.afs.createId();
+            this.afs.collection(`/tenants/${user.tenantId}/jobs`)
+              .doc(this.jobId)
+              .set({});
+          }
+          this.jobDoc = this.afs.doc<any>(`tenants/${user.tenantId}/jobs/${this.jobId}`);
+          this.jobDoc.valueChanges().subscribe(j => {
+            this.job = j;
+            this.customerControl.setValue(this.job.customer);
+          });
         });
       })
     })
@@ -44,6 +64,10 @@ export class JobComponent implements OnInit {
       map(value => typeof value === 'string' ? value : value.name),
       map(name => name ? this._filter(name) : this.contacts.slice())
     );
+  }
+
+  customerSelected(customer: any): void {
+    this.jobDoc.update({ customer });
   }
 
   createInvoice(): void {

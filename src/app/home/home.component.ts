@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
 
 interface Contact {
   contactID: string;
@@ -14,6 +15,8 @@ interface Contact {
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  private jobsCollection: AngularFirestoreCollection<any>;
+  jobs: Observable<any[]>;
   toLoad: number = 0;
   doesTokenExist: boolean = false;
   uid: string | undefined;
@@ -44,11 +47,17 @@ export class HomeComponent implements OnInit {
             } else {
               this.organisationName = user.organisationName;
               this.tenantId = user.tenantId;
+              this.getJobs();
             }
           }
         })
       }
     })
+  }
+
+  getJobs() {
+    this.jobsCollection = this.afs.collection<any>(`tenants/${this.tenantId}/jobs`);
+    this.jobs = this.jobsCollection.valueChanges({ idField: 'id' });
   }
 
   syncXero() {
@@ -60,6 +69,7 @@ export class HomeComponent implements OnInit {
       this.tenantId = r.tenantId;
       this.afs.collection(`users`).doc(this.uid).update({ organisationName: this.organisationName, tenantId: this.tenantId })
       this.syncContacts();
+      this.getJobs();
     },
       (err) => {
         this.toLoad--;
