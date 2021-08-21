@@ -18,6 +18,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
+import { NgxCurrencyModule } from "ngx-currency";
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -57,6 +58,7 @@ import { LoginComponent } from './login/login.component';
       authGuardLoggedInURL: '/'
     }),
     FlexLayoutModule,
+    NgxCurrencyModule,
     MatToolbarModule,
     MatDialogModule,
     MatIconModule,

@@ -1,3 +1,5 @@
+<mat-progress-bar mode="indeterminate" *ngIf="!job"></mat-progress-bar>
+
 <mat-card>
     <mat-card-header>
         <mat-card-title>Job</mat-card-title>
@@ -19,19 +21,40 @@
         <mat-radio-group aria-label="Select an option" [ngModel]="job.type"
             (ngModelChange)="jobDoc.update({type: $event})">
             <mat-radio-button value="warranty">Warranty</mat-radio-button>
+            <mat-radio-button value="opp">OPP</mat-radio-button>
             <mat-radio-button value="charge">Charge</mat-radio-button>
             <mat-radio-button value="third party">Third Party</mat-radio-button>
+            <mat-radio-button value="on-site">On-Site</mat-radio-button>
+            <mat-radio-button value="SA">SA</mat-radio-button>
+            <mat-radio-button value="PM">PM</mat-radio-button>
+            <mat-radio-button value="DKT">DKT</mat-radio-button>
         </mat-radio-group>
+        <mat-form-field>
+            <input matInput placeholder="Brand" [ngModel]="job.unit.brand"
+                (ngModelChange)="updateUnit({brand: $event})">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="Model Number" [ngModel]="job.unit.model"
+                (ngModelChange)="updateUnit({model: $event})">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="LT Number" [ngModel]="job.unit.lt" (ngModelChange)="updateUnit({lt: $event})">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="Serial Number" [ngModel]="job.unit.serialNumber"
+                (ngModelChange)="updateUnit({serialNumber: $event})">
+        </mat-form-field>
+
         <mat-form-field class="full-width">
-            <textarea matInput rows="5" placeholder="Fault Reported" [ngModel]="job.faultReported"
+            <textarea matInput rows="3" placeholder="Fault Reported" [ngModel]="job.faultReported"
                 (ngModelChange)="jobDoc.update({faultReported: $event})"></textarea>
         </mat-form-field>
         <mat-form-field class=" full-width">
-            <textarea matInput rows="5" placeholder="Findings" [ngModel]="job.findings"
+            <textarea matInput rows="3" placeholder="Findings" [ngModel]="job.findings"
                 (ngModelChange)="jobDoc.update({findings: $event})"></textarea>
         </mat-form-field>
         <mat-form-field>
-            <input matInput type="number" placeholder="Amount" [ngModel]="job.amount"
+            <input matInput currencyMask placeholder="Amount" [ngModel]="job.amount"
                 (ngModelChange)="jobDoc.update({amount: $event})">
         </mat-form-field>
 

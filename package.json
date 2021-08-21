@@ -26,6 +26,7 @@
     "@angular/service-worker": "~12.1.2",
     "firebase": "^7.0 || ^8.0",
     "ngx-auth-firebaseui": "^5.3.0",
+    "ngx-currency": "^2.5.2",
     "pwa": "^1.9.7",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",

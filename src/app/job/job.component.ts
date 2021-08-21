@@ -53,6 +53,9 @@ export class JobComponent implements OnInit {
           this.jobDoc = this.afs.doc<any>(`tenants/${user.tenantId}/jobs/${this.jobId}`);
           this.jobDoc.valueChanges().subscribe(j => {
             this.job = j;
+            if (!this.job.unit) {
+              this.job.unit = {};
+            }
             this.customerControl.setValue(this.job.customer);
           });
         });
@@ -68,6 +71,10 @@ export class JobComponent implements OnInit {
 
   customerSelected(customer: any): void {
     this.jobDoc.update({ customer });
+  }
+
+  updateUnit(field: any): void {
+    this.jobDoc.update({ unit: { ...this.job.unit, ...field } });
   }
 
   createInvoice(): void {
